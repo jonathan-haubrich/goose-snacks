@@ -1,5 +1,5 @@
 // app/page.tsx
-import GooseSnacksTable from '@/components/goosesnackstable'; // Client-side component
+import GooseSnacksTable from '@/components/goose-snacks-table'; // Client-side component
 
 export default function Page() {
   return (

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Product } from "../../types/product"; // Assuming Product is a class that can handle the logic
-import ProductRow from "../components/productrow";
+import GooseSnacksTableHeader from "./goose-snacks-table-header";
+import GooseSnacksTableRow from "./goose-snack-table-row";
 
 interface PriceModifiers {
   profitPercentage: number;
@@ -71,31 +72,13 @@ export default function GooseSnacksTable() {
           </h1>
         </div>
         <table className="border border-fuchsia-500">
-          <thead>
-            <tr className="bg-cyan-600 bg-opacity-50">
-              <th className="py-2 px-3 text-left border-r border-b border-fuchsia-500 text-white text-outline whitespace-nowrap">
-                Votes
-              </th>
-              <th className="py-2 px-3 text-left border-r border-b border-fuchsia-500 text-white text-outline whitespace-nowrap">
-                Image
-              </th>
-              <th className="py-2 px-3 text-left border-r border-b border-fuchsia-500 text-white text-outline whitespace-nowrap">
-                Product
-              </th>
-              <th className="py-2 px-3 text-right border-r border-b border-fuchsia-500 text-white text-outline whitespace-nowrap">
-                Cost
-              </th>
-              <th className="py-2 px-3 text-right border-b border-fuchsia-500 text-white text-outline whitespace-nowrap">
-                Goose Price
-              </th>
-            </tr>
-          </thead>
+          <GooseSnacksTableHeader />
           <tbody>
             {products.map((product) => {
               const _product = Product.fromData(product); // Assuming this is a transformation method for Product
               
               return (
-                <ProductRow key={_product.id} product={_product} priceModifiers={priceModifiers} />
+                <GooseSnacksTableRow key={_product.id} product={_product} priceModifiers={priceModifiers} />
               );
             })}
           </tbody>
