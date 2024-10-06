@@ -7,9 +7,11 @@ const prisma = new PrismaClient();
 export async function GET(_: Request) {
   try {
     const products = await prisma.products.findMany({
-        orderBy: {
-            votes: 'desc'
+      orderBy: {
+        Votes: {
+          _count: 'desc'
         }
+      }
     });
 
     return NextResponse.json(products);

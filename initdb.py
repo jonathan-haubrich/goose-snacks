@@ -11,7 +11,6 @@ cursor = conn.cursor()
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Products (
     id INTEGER PRIMARY KEY,
-    votes INTEGER,
     name TEXT,
     imageUrl TEXT,
     fullPrice TEXT,
@@ -41,11 +40,11 @@ CREATE TABLE IF NOT EXISTS PriceModifiers (
 
 
 # Function to insert a product into the table
-def insert_product(id, votes, name, imageUrl, fullPrice, price):
+def insert_product(id, name, imageUrl, fullPrice, price):
     cursor.execute('''
-    INSERT INTO Products (id, votes, name, imageUrl, fullPrice, price)
-    VALUES (?, ?, ?, ?, ?, ?)
-    ''', (id, votes, name, imageUrl, fullPrice, price))
+    INSERT INTO Products (id, name, imageUrl, fullPrice, price)
+    VALUES (?, ?, ?, ?, ?)
+    ''', (id, name, imageUrl, fullPrice, price))
     conn.commit()
 
 with open('./data/items.json') as fp:
@@ -53,7 +52,6 @@ with open('./data/items.json') as fp:
 
 for item in all_items:
     item_id = int(item['productId'])
-    votes = 0
     name = item['name']
     imageUrl = item['viewSection']['itemImage']['url']
     price = item['price']['viewSection']['priceString']
@@ -61,7 +59,7 @@ for item in all_items:
     fullPrice = item['price']['viewSection']['fullPriceString']
     fullPrice = fullPrice if fullPrice is not None else price
 
-    insert_product(item_id, votes, name, imageUrl, fullPrice, price)
+    insert_product(item_id, name, imageUrl, fullPrice, price)
 
 cursor.execute('''
 INSERT INTO PriceModifiers (profitPercentage, roundingModifier)

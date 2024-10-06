@@ -15,7 +15,6 @@ model PriceModifiers {
 
 model Products {
   id        Int     @id @default(autoincrement())
-  votes     Int?
   name      String?
   imageUrl  String?
   fullPrice String?
