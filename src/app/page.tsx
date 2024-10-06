@@ -5,6 +5,14 @@ import { Product } from '../../types/product';
 // Initialize Prisma Client
 const prisma = new PrismaClient();
 
+async function getVoteCount(productId: number) {
+  const response = await fetch(`/api/votes?productId=${productId}`);
+  const data = await response.json();
+  console.log('Vote count:', data.votes);
+
+  return data;
+}
+
 export default async function GooseSnacksTable() {
   const products = await prisma.products.findMany();
 
@@ -30,6 +38,8 @@ export default async function GooseSnacksTable() {
             {products.map(async (product) => {
               const _product = Product.fromData(product);
               const goosePrice = await _product.calcGoosePrice();
+              const { votes, yourVotes } = await getVoteCount(_product.id);
+
               return (
                 <tr 
                   key={_product.id} 
@@ -41,7 +51,7 @@ export default async function GooseSnacksTable() {
                       <div className="flex flex-col items-center">
                         <span className="text-lg font-bold text-fuchsia-500">Total</span>
                         <div className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-cyan-500 stroke-black stroke-1">
-                          0
+                          { votes }
                         </div>
                       </div>
 
@@ -49,7 +59,7 @@ export default async function GooseSnacksTable() {
                       <div className="flex flex-col items-center">
                         <span className="text-lg font-bold text-fuchsia-500">Yours</span>
                         <div className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-cyan-500 stroke-black stroke-1">
-                          0
+                          { yourVotes }
                         </div>
                       </div>
                     </div>
