@@ -63,7 +63,7 @@ export class Product implements ProductInterface {
             const costPerItem = fullPriceValue / count;
 
             const roundFactor = 1 / roundingModifier;
-            const goosePrice: number = Math.round(costPerItem * roundFactor) / roundFactor;
+            const goosePrice: number = Math.ceil(costPerItem * roundFactor) / roundFactor;
 
             return goosePrice;
         }
