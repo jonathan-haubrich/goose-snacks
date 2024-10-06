@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS Votes (
     productId INTEGER,
     ipAddress TEXT,
     submittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (productId) REFERENCES Product(id)
+    FOREIGN KEY (productId) REFERENCES Products(id)
 )
 ''')
 

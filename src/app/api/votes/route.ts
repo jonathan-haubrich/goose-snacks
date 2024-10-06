@@ -50,14 +50,14 @@ export async function POST(request: Request) {
     const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'Unknown';
 
     // Add a new vote for the product
-    const newVote = await prisma.votes.create({
+    await prisma.votes.create({
       data: {
         productId: productId,
         ipAddress: ipAddress,
       },
     });
 
-    return NextResponse.json({ success: true, vote: newVote });
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error submitting vote:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

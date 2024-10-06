@@ -20,6 +20,7 @@ model Products {
   imageUrl  String?
   fullPrice String?
   price     String?
+  Votes     Votes[]
 }
 
 model Votes {
@@ -27,4 +28,5 @@ model Votes {
   productId   Int?
   ipAddress   String?
   submittedAt DateTime? @default(now())
+  Products    Products? @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
