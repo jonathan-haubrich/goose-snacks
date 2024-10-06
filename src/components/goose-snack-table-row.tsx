@@ -94,7 +94,7 @@ export default function GooseSnacksTableRow({ product, priceModifiers }: Product
           </div>
         </td>
         <td className="py-2 px-1 sm:px-2 md:px-3 border-r border-fuchsia-500">
-          <div className="relative w-[200px] h-[200px] overflow-hidden border border-fuchsia-500">
+          <div className="relative w-[125px] h-[125px] overflow-hidden border border-fuchsia-500">
             <Image
               src={product.imageUrl}
               alt={product.name}
