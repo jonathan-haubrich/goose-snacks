@@ -1,91 +1,10 @@
-import Image from "next/image"
-import { PrismaClient } from '@prisma/client';
-import { Product } from '../../types/product';
+// app/page.tsx
+import GooseSnacksTable from '@/components/goosesnackstable'; // Client-side component
 
-// Initialize Prisma Client
-const prisma = new PrismaClient();
-
-async function getVoteCount(productId: number) {
-  const response = await fetch(`/api/votes?productId=${productId}`);
-  const data = await response.json();
-  console.log('Vote count:', data.votes);
-
-  return data;
-}
-
-export default async function GooseSnacksTable() {
-  const products = await prisma.products.findMany();
-
+export default function Page() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-fuchsia-600 via-purple-900 to-cyan-600">
-      <div className="w-full max-w-4xl overflow-hidden backdrop-blur-sm">
-      <div className="p-4 flex justify-center items-center">
-        <h1 className="text-5xl font-bold text-white text-center" style={{ textShadow: "4px 4px 0px cyan, 8px 8px 0px magenta" }}>
-          Goose Snacks
-        </h1>
-      </div>
-      <table className="border border-fuchsia-500">
-        <thead>
-          <tr className="bg-cyan-600 bg-opacity-50">
-            <th className="py-2 px-3 text-left border-r border-b border-fuchsia-500 text-white text-outline whitespace-nowrap">Votes</th>
-            <th className="py-2 px-3 text-left border-r border-b border-fuchsia-500 text-white text-outline whitespace-nowrap">Image</th>
-            <th className="py-2 px-3 text-left border-r border-b border-fuchsia-500 text-white text-outline whitespace-nowrap">Product</th>
-            <th className="py-2 px-3 text-right border-r border-b border-fuchsia-500 text-white text-outline whitespace-nowrap">Cost</th>
-            <th className="py-2 px-3 text-right border-b border-fuchsia-500 text-white text-outline whitespace-nowrap">Goose Price</th>
-          </tr>
-        </thead>
-        <tbody>
-            {products.map(async (product) => {
-              const _product = Product.fromData(product);
-              const goosePrice = await _product.calcGoosePrice();
-              const { votes, yourVotes } = await getVoteCount(_product.id);
-
-              return (
-                <tr 
-                  key={_product.id} 
-                  className="border-b border-fuchsia-500 bg-black bg-opacity-75 hover:bg-opacity-90 transition-colors duration-200"
-                >
-                  <td className="py-2 px-3 font-medium border-r border-fuchsia-500 text-fuchsia-300 text-outline">
-                    <div className="flex p-4 justify-center items-center gap-8">
-                      {/* Total */}
-                      <div className="flex flex-col items-center">
-                        <span className="text-lg font-bold text-fuchsia-500">Total</span>
-                        <div className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-cyan-500 stroke-black stroke-1">
-                          { votes }
-                        </div>
-                      </div>
-
-                      {/* Yours */}
-                      <div className="flex flex-col items-center">
-                        <span className="text-lg font-bold text-fuchsia-500">Yours</span>
-                        <div className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-cyan-500 stroke-black stroke-1">
-                          { yourVotes }
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-2 px-3 border-r border-fuchsia-500">
-                    <div className="relative w-100 h-100 overflow-hidden border border-fuchsia-500">
-                      <Image
-                        src={_product.imageUrl}
-                        alt={_product.name}
-                        width={200}
-                        height={200}
-                        className="transition-all duration-300 hover:scale-110"
-                      />
-                    </div>
-                  </td>
-                  <td className="py-2 px-3 font-medium border-r border-fuchsia-500 text-fuchsia-300 text-outline">{_product.name}</td>
-                  <td className="py-2 px-3 text-right border-r border-fuchsia-500 text-cyan-300 text-outline">{_product.fullPrice}</td>
-                  <td className="py-2 px-3 text-right text-fuchsia-300 text-outline">
-                    ${goosePrice.toFixed(2)}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+    <div>
+      <GooseSnacksTable /> {/* Client-side component */}
     </div>
-  )
+  );
 }

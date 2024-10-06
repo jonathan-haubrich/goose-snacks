@@ -11,7 +11,7 @@ interface ProductInterface {
     price: string;
 
     getCount(): number | null;
-    calcGoosePrice(): Promise<number>;
+    calcGoosePrice(profitPercentage: number, roundingModifier: number): Promise<number>;
 }
 
 export class Product implements ProductInterface {
@@ -54,33 +54,18 @@ export class Product implements ProductInterface {
         return null; // Return null if no match is found
     }
 
-    async calcGoosePrice(): Promise<number> {
-        // Fetch the first price modifier entry
-        const priceModifier = await prisma.priceModifiers.findFirst();
-
-        // defaults
-        var profitPercentage = .25;
-        var roundingModifier = .10;
-        if (priceModifier) {
-            // Destructure the result to unpack the fields
-            profitPercentage = priceModifier.profitPercentage ? priceModifier.profitPercentage : profitPercentage;
-            roundingModifier = priceModifier.roundingModifier ? priceModifier.roundingModifier : roundingModifier;
-        }
-        
-
-        var fullPriceValue = parseFloat(this.fullPrice.replace(/[$,]/g, '')); // Convert fullPrice to float
+    async calcGoosePrice(profitPercentage: number, roundingModifier: number): Promise<number> {
+        let fullPriceValue = parseFloat(this.fullPrice.replace(/[$,]/g, ''));
         fullPriceValue *= (1.0 + profitPercentage);
 
-        // round to nearest roundingModifier
         const count = this.getCount();
-        if(count !== null) {
-
+        if (count !== null) {
             const costPerItem = fullPriceValue / count;
 
             const roundFactor = 1 / roundingModifier;
             const goosePrice: number = Math.round(costPerItem * roundFactor) / roundFactor;
 
-            return goosePrice; // Return the rounded price
+            return goosePrice;
         }
 
         return 1.00;
