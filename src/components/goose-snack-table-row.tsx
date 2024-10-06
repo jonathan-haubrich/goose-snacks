@@ -72,11 +72,11 @@ export default function GooseSnacksTableRow({ product, priceModifiers }: Product
     };
   
     return (
-        <tr
+      <tr
         className="border-b border-fuchsia-500 bg-black bg-opacity-75 hover:bg-opacity-90 transition-colors duration-200 select-none"
         onClick={handleRowClick}
       >
-        <td className="w-1/5 py-2 px-1 sm:px-2 md:px-3 font-medium border-r border-fuchsia-500 text-fuchsia-300 text-outline">
+        <td className="w-auto py-2 px-1 sm:px-2 md:px-3 font-medium border-r border-fuchsia-500 text-fuchsia-300 text-outline">
           <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
             <div className="flex flex-col items-center">
               <span className="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-fuchsia-500">Total</span>
@@ -84,7 +84,7 @@ export default function GooseSnacksTableRow({ product, priceModifiers }: Product
                 {votes}
               </div>
             </div>
-  
+
             <div id="yours-div" className="p-1 sm:p-2 border border-fuchsia-500 flex flex-col items-center">
               <span className="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-fuchsia-500">Yours</span>
               <div className="text-lg sm:text-xl md:text-2xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-cyan-500 stroke-black stroke-1">
@@ -93,7 +93,7 @@ export default function GooseSnacksTableRow({ product, priceModifiers }: Product
             </div>
           </div>
         </td>
-        <td className="w-1/5 py-2 px-1 sm:px-2 md:px-3 border-r border-fuchsia-500">
+        <td className="w-1/2 py-2 px-1 sm:px-2 md:px-3 border-r border-fuchsia-500">
           <div className="relative w-full aspect-square overflow-hidden border border-fuchsia-500">
             <Image
               src={product.imageUrl}
@@ -104,13 +104,13 @@ export default function GooseSnacksTableRow({ product, priceModifiers }: Product
             />
           </div>
         </td>
-        <td className="w-1/5 py-2 px-1 sm:px-2 md:px-3 font-medium border-r border-fuchsia-500 text-fuchsia-300 text-outline hidden md:table-cell">
+        <td className="w-auto py-2 px-1 sm:px-2 md:px-3 font-medium border-r border-fuchsia-500 text-fuchsia-300 text-outline hidden md:table-cell">
           <span className="text-xs sm:text-sm md:text-base lg:text-lg">{product.name}</span>
         </td>
-        <td className="w-1/5 py-2 px-1 sm:px-2 md:px-3 text-right border-r border-fuchsia-500 text-cyan-300 text-outline">
+        <td className="w-auto py-2 px-1 sm:px-2 md:px-3 text-right border-r border-fuchsia-500 text-cyan-300 text-outline">
           <span className="text-xs sm:text-sm md:text-base lg:text-lg">{product.fullPrice}</span>
         </td>
-        <td className="w-1/5 py-2 px-1 sm:px-2 md:px-3 text-right text-fuchsia-300 text-outline">
+        <td className="w-auto py-2 px-1 sm:px-2 md:px-3 text-right text-fuchsia-300 text-outline">
           <span className="text-xs sm:text-sm md:text-base lg:text-lg">${goosePrice.toFixed(2)}</span>
         </td>
       </tr>

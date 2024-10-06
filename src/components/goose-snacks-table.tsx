@@ -71,7 +71,7 @@ export default function GooseSnacksTable() {
             Goose Snacks
           </h1>
         </div>
-        <table className="border border-fuchsia-500">
+        <table className="w-full border border-fuchsia-500">
           <GooseSnacksTableHeader />
           <tbody>
             {products.map((product) => {
