@@ -1,5 +1,6 @@
-export interface ProductInterface {
-    id: string;
+interface ProductInterface {
+    id: number;
+    votes: number;
     name: string;
     imageUrl: string;
     fullPrice: string;
@@ -10,27 +11,30 @@ export interface ProductInterface {
 }
 
 export class Product implements ProductInterface {
-    id: string;
+    id: number;
+    votes: number;
     name: string;
     imageUrl: string;
     fullPrice: string;
     price: string;
 
-    constructor(id: string, name: string, imageUrl: string, fullPrice: string, price: string) {
+    constructor(id: number, votes: number, name: string, imageUrl: string, fullPrice: string | undefined, price: string) {
         this.id = id;
+        this.votes = votes;
         this.name = name;
         this.imageUrl = imageUrl;
         this.fullPrice = fullPrice ? fullPrice : price;
         this.price = price;
     }
 
-    static fromJsonItem(data: any): Product {
+    static fromData(data: any): Product {
         return new Product(
             data.id,
+            data.votes,
             data.name,
-            data.viewSection.itemImage.url,
-            data.price.viewSection.fullPriceString,
-            data.price.viewSection.priceString
+            data.imageUrl,
+            data.fullPrice,
+            data.price
         );
     }
 
@@ -47,11 +51,13 @@ export class Product implements ProductInterface {
     }
 
     calcGoosePrice(): number {
-        const fullPriceValue = parseFloat(this.fullPrice.replace(/[$,]/g, '')); // Convert fullPrice to float
+        var fullPriceValue = parseFloat(this.fullPrice.replace(/[$,]/g, '')); // Convert fullPrice to float
+        fullPriceValue *= 1.10;
 
         // round to nearest $.25
         const count = this.getCount();
         if(count !== null) {
+
             const costPerItem = fullPriceValue / count;
 
             const goosePrice: number = Math.round(costPerItem * 4) / 4;
