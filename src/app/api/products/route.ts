@@ -6,7 +6,11 @@ const prisma = new PrismaClient();
 // Handler for GET and POST requests
 export async function GET(_: Request) {
   try {
-    const products = await prisma.products.findMany();
+    const products = await prisma.products.findMany({
+        orderBy: {
+            votes: 'desc'
+        }
+    });
 
     return NextResponse.json(products);
   } catch (error) {

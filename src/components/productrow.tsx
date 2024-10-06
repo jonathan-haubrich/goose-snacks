@@ -39,27 +39,43 @@ export default function ProductRow({ product, priceModifiers }: ProductRowProps)
       loadData();
     }, [product]);
 
-    // Function to increase votes by 1 when clicked
-    const handleVote = async () => {
-        // Optionally, send the new vote count to your server
-        await fetch("/api/votes", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            productId: product.id
-        }),
-        });
+    // Function to handle row click (increments votes)
+    const handleRowClick = async (event: any) => {
+        // Check if the click event was on the "Yours" div
+        if (event.target.closest("#yours-div")) {
+            // Call the DELETE endpoint to decrement votes
+            await fetch('/api/votes', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    productId: product.id,
+                }),
+            });
+        } else {
+            // Call the POST endpoint to increment votes
+            await fetch('/api/votes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    productId: product.id,
+                }),
+            });
+        }
 
-        // Optionally update yourVotes if the vote is personal
         const { votes, yourVotes } = await getVoteCount(product.id);
         setVotes(votes);
         setYourVotes(yourVotes);
     };
   
     return (
-        <tr className="border-b border-fuchsia-500 bg-black bg-opacity-75 hover:bg-opacity-90 transition-colors duration-200">
+        <tr
+            className="border-b border-fuchsia-500 bg-black bg-opacity-75 hover:bg-opacity-90 transition-colors duration-200 select-none"
+            onClick={handleRowClick} // Increment votes when row is clicked    
+        >
           <td className="py-2 px-3 font-medium border-r border-fuchsia-500 text-fuchsia-300 text-outline">
             <div className="flex p-4 justify-center items-center gap-8">
               <div className="flex flex-col items-center">
@@ -69,19 +85,13 @@ export default function ProductRow({ product, priceModifiers }: ProductRowProps)
                 </div>
               </div>
     
-              <div className="flex flex-col items-center">
+              <div id="yours-div" className="p-2 border border-fuchsia-500 flex flex-col items-center" > {/* Prevent event bubbling */}
                 <span className="text-lg font-bold text-fuchsia-500">Yours</span>
                 <div className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-cyan-500 stroke-black stroke-1">
                   {yourVotes}
                 </div>
               </div>
             </div>
-            <button
-              onClick={handleVote}
-              className="mt-2 py-1 px-3 bg-fuchsia-600 text-white rounded hover:bg-fuchsia-700 transition-all"
-            >
-              Vote
-            </button>
           </td>
           <td className="py-2 px-3 border-r border-fuchsia-500">
             <div className="relative w-100 h-100 overflow-hidden border border-fuchsia-500">
