@@ -7,7 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
+model PriceModifiers {
+  id               Int    @id @default(autoincrement())
+  profitPercentage Float?
+  roundingModifier Float?
+}
+
+model Products {
   id        Int     @id @default(autoincrement())
   votes     Int?
   name      String?
@@ -15,4 +21,10 @@ model Product {
   fullPrice String?
   price     String?
 }
-3
+
+model Votes {
+  id          Int       @id @default(autoincrement())
+  productId   Int?
+  ipAddress   String?
+  submittedAt DateTime? @default(now())
+}

@@ -9,7 +9,7 @@ cursor = conn.cursor()
 
 # Create a table for storing product information
 cursor.execute('''
-CREATE TABLE IF NOT EXISTS Product (
+CREATE TABLE IF NOT EXISTS Products (
     id INTEGER PRIMARY KEY,
     votes INTEGER,
     name TEXT,
@@ -19,10 +19,31 @@ CREATE TABLE IF NOT EXISTS Product (
 )
 ''')
 
+# Create Votes table with foreign key to Product table
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Votes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    productId INTEGER,
+    ipAddress TEXT,
+    submittedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (productId) REFERENCES Product(id)
+)
+''')
+
+# Create PriceModifiers table to store profit percentage and rounding modifier
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS PriceModifiers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    profitPercentage REAL,
+    roundingModifier REAL
+)
+''')
+
+
 # Function to insert a product into the table
 def insert_product(id, votes, name, imageUrl, fullPrice, price):
     cursor.execute('''
-    INSERT INTO Product (id, votes, name, imageUrl, fullPrice, price)
+    INSERT INTO Products (id, votes, name, imageUrl, fullPrice, price)
     VALUES (?, ?, ?, ?, ?, ?)
     ''', (id, votes, name, imageUrl, fullPrice, price))
     conn.commit()
@@ -40,9 +61,13 @@ for item in all_items:
     fullPrice = item['price']['viewSection']['fullPriceString']
     fullPrice = fullPrice if fullPrice is not None else price
 
-    print(price, fullPrice, item['price'])
-
     insert_product(item_id, votes, name, imageUrl, fullPrice, price)
+
+cursor.execute('''
+INSERT INTO PriceModifiers (profitPercentage, roundingModifier)
+VALUES (? , ?)
+''', (.10, .25))
+conn.commit()
 
 # Close the database connection when done
 conn.close()
