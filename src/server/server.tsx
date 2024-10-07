@@ -1,15 +1,14 @@
 import express, { Request, Response } from 'express';
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
-import next from 'next';
+import next, { NextApiHandler } from 'next';
 import { parse } from 'url';
-
-const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev });
-const handle = app.getRequestHandler();
-
+import { IncomingMessage, ServerResponse } from 'http'; // Use Node.js types
 import { addClient } from '../lib/clientManager.js';
 
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev }); // Ensure next() is called properly
+const handle = app.getRequestHandler(); // Explicitly type handle
 const port = process.env.PORT || 3000;
 
 app.prepare().then(() => {
@@ -41,7 +40,7 @@ app.prepare().then(() => {
   });
 
   // Handle all other Next.js requests
-  expressApp.all('*', (req: Request, res: Response) => {
+  expressApp.all('*', (req: IncomingMessage, res: ServerResponse) => {
     return handle(req, res);
   });
 

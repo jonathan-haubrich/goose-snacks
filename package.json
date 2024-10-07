@@ -4,10 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx tsx src/server/server.tsx",
-    "build": "tsc",
-    "start": "node dist/src/server/server.js",
-    "lint": "next lint"
+    "dev": "next dev",
+    "build": "next build && tsc --project tsconfig.server.json",
+    "start": "NODE_ENV=production node dist/server/server.js"
   },
   "main": "src/server/server.tsx",
   "dependencies": {

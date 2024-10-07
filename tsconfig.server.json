@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "target": "ES6",               // Or "ESNext" for latest features
+      "module": "ESNext",            // Use ESNext for ESM import/export
+      "moduleResolution": "Node", // Resolve modules with Node's ES module support
+      "outDir": "./dist",            // Output folder for compiled files
+      "esModuleInterop": true,       // Ensures compatibility with CommonJS modules
+      "strict": true,                // Enable strict type-checking
+      "skipLibCheck": true,          // Skip type checks for third-party libraries
+      "allowSyntheticDefaultImports": true // Allow default imports from CommonJS modules
+    },
+    "include": ["src/server/**/*.ts", "src/server/**/*.tsx"],
+    "exclude": ["node_modules"]
+  }
+  
