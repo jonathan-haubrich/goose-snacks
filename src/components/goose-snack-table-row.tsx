@@ -41,7 +41,9 @@ export default function GooseSnacksTableRow({ product, priceModifiers, subscribe
       setGoosePrice(calculatedGoosePrice);
     }
 
+    console.log("Setting subscriber map with refreshVotes");
     subscriberMap.set(product.id, refreshVotes);
+    console.log("Size of subscriberMap now: " + subscriberMap.size);
     
     loadData();
   }, [product]);
