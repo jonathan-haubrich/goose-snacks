@@ -8,7 +8,11 @@ export async function GET(_: Request) {
   try {
     const products = await prisma.products.findMany({
         include: {
-            Votes: true
+            _count: {
+              select: {
+                Votes: true
+              }
+            }
         }
     });
 
