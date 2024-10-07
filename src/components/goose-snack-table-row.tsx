@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
 import Image from "next/image";
 import { Product } from "@/types/product";
 
@@ -19,7 +19,7 @@ interface PriceModifiers {
 interface ProductRowProps {
     product: Product; // Use the Product type here
     priceModifiers: PriceModifiers; // Use PriceModifiers for the priceModifiers prop
-    subscriberMap: Map<number, () => Promise<void>>;
+    subscriberMap: MutableRefObject<Map<number, () => Promise<void>>>;
 }
 
 export default function GooseSnacksTableRow({ product, priceModifiers, subscriberMap }: ProductRowProps) {
@@ -42,8 +42,8 @@ export default function GooseSnacksTableRow({ product, priceModifiers, subscribe
     }
 
     console.log("Setting subscriber map with refreshVotes");
-    subscriberMap.set(product.id, refreshVotes);
-    console.log("Size of subscriberMap now: " + subscriberMap.size);
+    subscriberMap.current.set(product.id, refreshVotes);
+    console.log("Size of subscriberMap now: " + subscriberMap.current.size);
     
     loadData();
   }, [product]);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Product } from "../types/product"; // Assuming Product is a class that can handle the logic
 import GooseSnacksTableHeader from "./goose-snacks-table-header";
 import GooseSnacksTableRow from "./goose-snack-table-row";
@@ -36,8 +36,6 @@ async function fetchPriceModifiers(): Promise<{ profitPercentage: number; roundi
   }
 }
 
-let client: VoteSubscriber;
-
 export default function GooseSnacksTable() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +44,7 @@ export default function GooseSnacksTable() {
     roundingModifier: 0.10,
   });
 
-  const subscriberMap = new Map<number, () => Promise<void>>();
+  const subscriberMap = useRef(new Map<number, () => Promise<void>>());
 
   useEffect(() => {
 
@@ -60,14 +58,9 @@ export default function GooseSnacksTable() {
     const client = new VoteSubscriber(url, async (data: any) => {
       const { productId } = data;
   
-      console.log(subscriberMap);
-      const notifier = subscriberMap.get(productId);
-      console.log("Notifying: " + productId);
+      const notifier = subscriberMap.current.get(productId);
       if(notifier !== undefined) {
-        console.log("Calling notifier");
         await notifier();
-      } else {
-        console.log("No notifier found");
       }
     });
 
