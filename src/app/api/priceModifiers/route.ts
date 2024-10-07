@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export const dynamic = "force-dynamic";
+
 // Handler for GET and POST requests
 export async function GET(_: Request) {
   try {

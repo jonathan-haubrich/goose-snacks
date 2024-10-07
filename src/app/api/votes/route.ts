@@ -4,6 +4,8 @@ import { broadcastVotesUpdate } from '../../../lib/clientManager';
 
 const prisma = new PrismaClient();
 
+export const dynamic = "force-dynamic";
+
 // Handler for GET and POST requests
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
