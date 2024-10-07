@@ -14,7 +14,7 @@ class VoteSubscriber {
 
     this.socket.onmessage = async (event) => {
         const data = JSON.parse(event.data.toString());
-        console.log("WebSocket got message");
+        console.log("WebSocket got message: " + data);
         await this.handler(data);
     };
 

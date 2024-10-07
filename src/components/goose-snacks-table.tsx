@@ -60,9 +60,14 @@ export default function GooseSnacksTable() {
     const client = new VoteSubscriber(url, async (data: any) => {
       const { productId } = data;
   
+      console.log(subscriberMap);
       const notifier = subscriberMap.get(productId);
+      console.log("Notifying: " + productId);
       if(notifier !== undefined) {
+        console.log("Calling notifier");
         await notifier();
+      } else {
+        console.log("No notifier found");
       }
     });
 
