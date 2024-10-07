@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { broadcastVotesUpdate } from '../../../lib/clientManager';
 
 const prisma = new PrismaClient();
 
@@ -57,6 +58,8 @@ export async function POST(request: Request) {
             },
         });
 
+        broadcastVotesUpdate(productId);
+
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error('Error submitting vote:', error);
@@ -91,6 +94,8 @@ export async function DELETE(request: Request) {
         await prisma.votes.delete({
             where: { id: mostRecentVote.id }, // Use the vote ID to delete it
         });
+
+        broadcastVotesUpdate(productId);
 
         return NextResponse.json({ success: true });  
     } catch (error) {

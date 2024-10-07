@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Product } from "../../types/product"; // Assuming Product is a class that can handle the logic
+import { Product } from "../types/product"; // Assuming Product is a class that can handle the logic
 import GooseSnacksTableHeader from "./goose-snacks-table-header";
 import GooseSnacksTableRow from "./goose-snack-table-row";
+import VoteSubscriber from "../types/vote-subscriber";
 
 interface PriceModifiers {
   profitPercentage: number;
@@ -35,6 +36,8 @@ async function fetchPriceModifiers(): Promise<{ profitPercentage: number; roundi
   }
 }
 
+let client: VoteSubscriber;
+
 export default function GooseSnacksTable() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +45,29 @@ export default function GooseSnacksTable() {
     profitPercentage: 0.25,
     roundingModifier: 0.10,
   });
+
+  const subscriberMap = new Map<number, () => Promise<void>>();
+
+  useEffect(() => {
+
+    let url: string;
+    if(process.env.NODE_ENV === "production") {
+      url = "https://honk.edc137.com/wss";
+    } else {
+      url = "http://localhost:3000/wss";
+    }
+
+    const client = new VoteSubscriber(url, async (data: any) => {
+      const { productId } = data;
+  
+      const notifier = subscriberMap.get(productId);
+      if(notifier !== undefined) {
+        await notifier();
+      }
+    });
+
+    return () => client.close();
+  }, []);
 
   useEffect(() => {
     async function loadProducts() {
@@ -78,7 +104,7 @@ export default function GooseSnacksTable() {
               const _product = Product.fromData(product); // Assuming this is a transformation method for Product
               
               return (
-                <GooseSnacksTableRow key={_product.id} product={_product} priceModifiers={priceModifiers} />
+                <GooseSnacksTableRow key={_product.id} product={_product} priceModifiers={priceModifiers} subscriberMap={subscriberMap} />
               );
             })}
           </tbody>
